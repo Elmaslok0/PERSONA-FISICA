@@ -42,7 +42,7 @@ export function getSessionCookieOptions(
   const options: CookieOptions = {
     httpOnly: true,
     path: "/",
-    sameSite: "lax",
+    sameSite: "none",
     secure: true, // Always true for Koyeb as it uses HTTPS
   };
   
