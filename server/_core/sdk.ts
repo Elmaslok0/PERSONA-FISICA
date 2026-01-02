@@ -259,7 +259,14 @@ class SDKServer {
   async authenticateRequest(req: Request): Promise<User> {
     // Regular authentication flow
     const cookies = this.parseCookies(req.headers.cookie);
-    const sessionCookie = cookies.get(COOKIE_NAME);
+    let sessionCookie = cookies.get(COOKIE_NAME);
+    
+    // Fallback to Authorization header
+    const authHeader = req.headers.authorization;
+    if (!sessionCookie && authHeader?.startsWith("Bearer ")) {
+      sessionCookie = authHeader.substring(7);
+    }
+
     const session = await this.verifySession(sessionCookie);
 
     if (!session) {

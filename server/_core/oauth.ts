@@ -45,8 +45,8 @@ export function registerOAuthRoutes(app: Express) {
       console.log("[OAuth] Setting cookie:", COOKIE_NAME, "with options:", JSON.stringify(cookieOptions));
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
-      console.log("[OAuth] Redirecting to home");
-      res.redirect(302, "/");
+      console.log("[OAuth] Redirecting to home with token in URL");
+      res.redirect(302, `/?token=${sessionToken}`);
     } catch (error) {
       console.error("[OAuth] Callback failed with error:", error);
       if (error instanceof Error) {
