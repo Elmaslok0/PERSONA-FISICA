@@ -77,7 +77,7 @@ export const buroRouter = router({
           apellidoPaterno: input.apellidoPaterno,
           apellidoMaterno: input.apellidoMaterno,
           rfc: input.rfc,
-          fechaNacimiento: input.fechaNacimiento.replace(/-/g, ''), // DDMMYYYY o YYYYMMDD según necesite
+          fechaNacimiento: input.fechaNacimiento.replace(/-/g, ''),
           direccion: {
             calle: input.calle,
             numExt: input.numExt,
@@ -91,10 +91,8 @@ export const buroRouter = router({
           }
         };
 
-        // Intentar autenticación inicial
         const authResponse = await buroAPIClient.autenticar(personaBuro);
 
-        // Si hay errores de "sujeto no autenticado", necesitamos mostrar preguntas
         if (authResponse.respuesta?.errores?.sujetoNoAutenticado) {
           await updateBuroConsultation(consultation.id, {
             status: 'pending',
