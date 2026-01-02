@@ -51,8 +51,13 @@ class BuroAPIClient {
    * Maneja errores de API de forma consistente
    */
   private handleError(error: unknown, context: string): APIError {
+    console.error(`[BURO_API_ERROR] Context: ${context}`);
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<{ error?: string; message?: string }>;
+      console.error(`[BURO_API_ERROR] Status: ${axiosError.response?.status}`);
+      console.error(`[BURO_API_ERROR] Data:`, JSON.stringify(axiosError.response?.data, null, 2));
+      console.error(`[BURO_API_ERROR] Headers:`, JSON.stringify(axiosError.response?.headers, null, 2));
+      
       return {
         code: `BURO_API_ERROR_${context}`,
         message: axiosError.response?.data?.message || axiosError.message || 'Error desconocido',
