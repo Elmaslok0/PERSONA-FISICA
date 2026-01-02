@@ -42,12 +42,18 @@ export function registerOAuthRoutes(app: Express) {
       });
 
       const cookieOptions = getSessionCookieOptions(req);
+      console.log("[OAuth] Setting cookie:", COOKIE_NAME, "with options:", JSON.stringify(cookieOptions));
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
+      console.log("[OAuth] Redirecting to home");
       res.redirect(302, "/");
     } catch (error) {
-      console.error("[OAuth] Callback failed", error);
-      res.status(500).json({ error: "OAuth callback failed" });
+      console.error("[OAuth] Callback failed with error:", error);
+      if (error instanceof Error) {
+        console.error("[OAuth] Error message:", error.message);
+        console.error("[OAuth] Error stack:", error.stack);
+      }
+      res.status(500).json({ error: "OAuth callback failed", details: error instanceof Error ? error.message : String(error) });
     }
   });
 }

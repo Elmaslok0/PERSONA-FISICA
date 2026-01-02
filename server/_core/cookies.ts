@@ -39,10 +39,13 @@ export function getSessionCookieOptions(
   //       ? hostname
   //       : undefined;
 
-  return {
+  const options: CookieOptions = {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true, // Always true for Koyeb as it uses HTTPS
   };
+  
+  console.log("[Cookies] Generating options for host:", req.hostname, "Secure:", options.secure);
+  return options;
 }
