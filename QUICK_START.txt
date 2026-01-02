@@ -1,0 +1,94 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                  BURÓ DE CRÉDITO PERSONA FÍSICA                            ║
+║                    GUÍA RÁPIDA DE DESPLIEGUE                               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+✅ CREDENCIALES YA INTEGRADAS:
+   API Key: l7f4ab9619923343069e3a48c3209b61e4
+   API Secret: ee9ba699e9f54cd7bbe7948e0884ccc9
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 1: SUBIR A GITHUB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Abre una terminal en la carpeta del proyecto
+2. Ejecuta estos comandos en orden:
+
+   git init
+   git add .
+   git commit -m "Integración completa de APIs de Buró de Crédito Persona Física"
+   git remote add origin https://github.com/TU_USUARIO/buro-credito-pf.git
+   git branch -M main
+   git push -u origin main
+
+3. Cuando pida usuario/contraseña:
+   - Usuario: labad39@gmail.com
+   - Contraseña: Elmaslok01979@
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 2: DESPLEGAR EN KOYEB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ve a https://app.koyeb.com
+2. Haz clic en "Create Service"
+3. Selecciona "GitHub" como fuente
+4. Autoriza y selecciona tu repositorio
+5. En la rama, selecciona "main"
+6. Configura:
+   - Build Command: pnpm install && pnpm build
+   - Start Command: pnpm start
+   - Port: 3000
+
+7. Agrega estas variables de entorno:
+
+   NODE_ENV=production
+   PORT=3000
+   HOST=0.0.0.0
+   BURO_API_AUTENTICADOR_URL=https://api.burodecredito.com.mx:4431/devpf/autenticador
+   BURO_API_MONITOR_URL=https://api.burodecredito.com.mx:4431/devpf/monitor
+   BURO_API_ESTIMADOR_INGRESOS_URL=https://api.burodecredito.com.mx:4431/devpf/estimador-ingresos
+   BURO_API_PROSPECTOR_URL=https://api.burodecredito.com.mx:4431/devpf/prospector
+   BURO_API_INFORME_BURO_URL=https://api.burodecredito.com.mx:4431/devpf/informe-buro
+   BURO_API_REPORTE_CREDITO_URL=https://api.burodecredito.com.mx:4431/devpf/reporte-de-credito
+   BURO_API_KEY=l7f4ab9619923343069e3a48c3209b61e4
+   BURO_API_SECRET=ee9ba699e9f54cd7bbe7948e0884ccc9
+   OAUTH_SERVER_URL=https://tu-dominio.koyeb.app
+   MANUS_OAUTH_CLIENT_ID=test_client_id
+   MANUS_OAUTH_CLIENT_SECRET=test_client_secret
+
+8. Haz clic en "Deploy"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASO 3: VERIFICAR DESPLIEGUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Espera a que Koyeb termine el despliegue (5-10 minutos)
+2. Verifica que el estado sea "Running"
+3. Haz clic en la URL pública para acceder al panel
+4. ¡Listo! El panel está funcionando
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARCHIVOS IMPORTANTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- README.md           → Documentación completa del proyecto
+- DEPLOY.md           → Guía detallada de despliegue
+- .env.production     → Variables de entorno para producción
+- koyeb.yml           → Configuración de Koyeb
+- server/buro-service.ts  → Cliente de APIs (credenciales integradas)
+- server/routers/buro.ts  → Rutas del API
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SOPORTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para más información, consulta:
+- README.md para documentación completa
+- DEPLOY.md para troubleshooting
+
+¡Listo para desplegar! 🚀

@@ -1,0 +1,38 @@
+apiVersion: 1
+services:
+  - name: buro-credito-pf
+    git:
+      repo: https://github.com/Elmaslok0/PERSONA-FISICA.git
+      branch: main
+    build:
+      buildCommand: pnpm install && pnpm build
+    run:
+      startCommand: pnpm start
+      env:
+        - key: NODE_ENV
+          value: production
+        - key: PORT
+          value: "3000"
+        - key: HOST
+          value: 0.0.0.0
+        # Buró de Crédito APIs
+        - key: BURO_API_AUTENTICADOR_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/autenticador
+        - key: BURO_API_MONITOR_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/monitor
+        - key: BURO_API_ESTIMADOR_INGRESOS_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/estimador-ingresos
+        - key: BURO_API_PROSPECTOR_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/prospector
+        - key: BURO_API_INFORME_BURO_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/informe-buro
+        - key: BURO_API_REPORTE_CREDITO_URL
+          value: https://api.burodecredito.com.mx:4431/devpf/reporte-de-credito
+        # Credenciales de Buró
+        - key: BURO_API_KEY
+          value: l7f4ab9619923343069e3a48c3209b61e4
+        - key: BURO_API_SECRET
+          value: ee9ba699e9f54cd7bbe7948e0884ccc9
+    ports:
+      - port: 3000
+        protocol: http
