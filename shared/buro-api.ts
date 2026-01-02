@@ -1,5 +1,6 @@
 /**
  * Constantes y tipos para la integración con las APIs de Buró de Crédito
+ * Basado en las especificaciones oficiales (Swagger)
  */
 
 export const BURO_API_ENDPOINTS = {
@@ -7,9 +8,8 @@ export const BURO_API_ENDPOINTS = {
   PROSPECTOR: process.env.BURO_API_PROSPECTOR_URL || '',
   ESTIMADOR_INGRESOS: process.env.BURO_API_ESTIMADOR_INGRESOS_URL || '',
   INFORME_BURO: process.env.BURO_API_INFORME_BURO_URL || '',
-  // Dos APIs adicionales a integrar
-  API_QUINTA: process.env.BURO_API_QUINTA_URL || '',
-  API_SEXTA: process.env.BURO_API_SEXTA_URL || '',
+  MONITOR: process.env.BURO_API_MONITOR_URL || '',
+  REPORTE_CREDITO: process.env.BURO_API_REPORTE_CREDITO_URL || '',
 };
 
 export const BURO_API_CREDENTIALS = {
@@ -17,30 +17,42 @@ export const BURO_API_CREDENTIALS = {
   API_SECRET: process.env.BURO_API_SECRET || '',
 };
 
-// Tipos para Autenticador
+export interface Direccion {
+  calle: string;
+  numExt: string;
+  numInt?: string;
+  colonia: string;
+  delegacionMunicipio: string;
+  ciudad: string;
+  estado: string;
+  codPais: string;
+  codPostal: string;
+}
+
 export interface PersonaBCAutenticador {
-  nombre: string;
+  nombres: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
   rfc: string;
-  fechaNacimiento: string; // YYYY-MM-DD
+  fechaNacimiento: string; // DDMMYYYY o YYYY-MM-DD según API
   direccion: Direccion;
-  cuentas: CuentaClienteBC[];
-}
-
-export interface Direccion {
-  calle: string;
-  numero: string;
-  ciudad: string;
-  estado: string;
-  codigoPostal: string;
-  pais: string;
+  cuentas?: CuentaClienteBC[];
 }
 
 export interface CuentaClienteBC {
-  claveOtorgante: string;
-  nombreOtorgante: string;
+  claveOtorgante?: string;
+  nombreOtorgante?: string;
   numeroCuenta: string;
+}
+
+export interface AutenticacionBC {
+  ejercidoCreditoAutomotriz?: string;
+  ejercidoCreditoHipotecario?: string;
+  tarjetaCredito?: string;
+  tipoReporte?: string;
+  tipoSalidaAU?: string;
+  ultimosCuatroDigitos?: string;
+  referenciaOperador?: string;
 }
 
 export interface AutenticacionBCRequest {
@@ -49,129 +61,56 @@ export interface AutenticacionBCRequest {
   };
 }
 
-export interface AutenticacionBCResponse {
-  respuesta: {
-    autenticacion: {
-      ejercidoCreditoAutomotriz: string;
-      ejercidoCreditoHipotecario: string;
-      tarjetaCredito: string;
-      tipoReporte: string;
-      tipoSalidaAU: string;
-      ultimosCuatroDigitos: string;
-      referenciaOperador: string;
-    };
-    errores?: {
-      claveOPasswordErroneo?: string;
-      errorReporteBloqueado?: string;
-      errorSistemaBC?: string;
-      sujetoNoAutenticado?: string;
-    };
+export interface AR {
+  claveOPasswordErroneo?: string;
+  errorReporteBloqueado?: string;
+  errorSistemaBC?: string;
+  etiquetaSegmentoErronea?: string;
+  faltaCampoRequerido?: string;
+  referenciaOperador?: string;
+  sujetoNoAutenticado?: string;
+}
+
+export interface CreditReportResponse {
+  respuesta?: {
+    autenticacion?: AutenticacionBC;
+    errores?: AR;
+    personales?: any;
+    domicilios?: any[];
+    empleos?: any[];
+    cuentas?: any[];
+    consultas?: any[];
+    puntuacion?: any;
   };
   respuestaAutenticador: string;
 }
 
-// Tipos para Prospector
+// Alias para compatibilidad con el código existente
+export type AutenticacionBCResponse = CreditReportResponse;
+export type ProspectorResponse = CreditReportResponse;
+export type EstimadorIngresosResponse = CreditReportResponse;
+export type InformeBuroResponse = CreditReportResponse;
+
 export interface ProspectorRequest {
   consulta: {
     persona: PersonaBCAutenticador;
   };
 }
 
-export interface CuentasRespBC {
-  claveOtorgante: string;
-  nombreOtorgante: string;
-  numeroCuentaActual: string;
-  tipoCuenta: string;
-  tipoContrato: string;
-  saldoActual: string;
-  saldoVencido: string;
-  creditoMaximo: string;
-  limiteCredito: string;
-  fechaAperturaCuenta: string;
-  fechaCierreCuenta: string;
-  fechaUltimoPago: string;
-  montoPagar: string;
-  numeroPagosVencidos: string;
-  historicoPagos: string;
-  formaPagoActual: string;
-  frecuenciaPagos: string;
-  claveObservacion: string;
-  fechaActualizacion: string;
-}
-
-export interface ProspectorResponse {
-  respuesta: {
-    cuentas: CuentasRespBC[];
-    consultasEfectuadas: ConsultaEfectuadaRespBC[];
-    declaraciones: DeclaracionesClienteRespBC[];
-    errores?: Record<string, string>;
-  };
-  respuestaAutenticador: string;
-}
-
-export interface ConsultaEfectuadaRespBC {
-  fechaConsulta: string;
-  nombreOtorgante: string;
-  tipoContrato: string;
-  importeContrato: string;
-  resultadoFinal: string;
-}
-
-export interface DeclaracionesClienteRespBC {
-  declaracionConsumidor: string;
-}
-
-// Tipos para Estimador de Ingresos
 export interface EstimadorIngresosRequest {
   consulta: {
     persona: PersonaBCAutenticador;
   };
 }
 
-export interface EstimadorIngresosResponse {
-  respuesta: {
-    estimacionIngresos: {
-      ingresoEstimado: string;
-      periodicidad: string;
-      confiabilidad: string;
-      fuentes: string[];
-    };
-    errores?: Record<string, string>;
-  };
-  respuestaAutenticador: string;
-}
-
-// Tipos para Informe de Buró
 export interface InformeBuroRequest {
   consulta: {
     persona: PersonaBCAutenticador;
   };
 }
 
-export interface InformeBuroResponse {
-  respuesta: {
-    datosPersonales: {
-      nombre: string;
-      rfc: string;
-      fechaNacimiento: string;
-      direccion: Direccion;
-    };
-    cuentas: CuentasRespBC[];
-    consultasEfectuadas: ConsultaEfectuadaRespBC[];
-    puntuacionCredito: {
-      score: number;
-      categoria: string;
-      fecha: string;
-    };
-    declaraciones: DeclaracionesClienteRespBC[];
-    errores?: Record<string, string>;
-  };
-  respuestaAutenticador: string;
-}
-
-// Tipo genérico para respuestas de error
 export interface APIError {
   code: string;
   message: string;
-  details?: Record<string, unknown>;
+  details?: any;
 }
